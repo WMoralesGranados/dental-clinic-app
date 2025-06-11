@@ -1,57 +1,40 @@
-import IAppt from "../interfaces/IAppt";
-import { STATUS } from "../enums/enums";
+import { STATUS } from '../enums/enums';
 import ApptDto from "../dto/appt.dto";
-import app from '../server';
+import { AppDataSource } from '../config/data-source';
+import { Appt } from "../entities/Appt";
 
-const appts: IAppt[] = [
-  {
-    id: 1,
-    date: new Date(),
-    time: "10:00",
-    userId: 1,
-    status: STATUS.PENDING,
-  },
-  {
-    id: 2,
-    date: new Date(),
-    time: "10:00",
-    userId: 1,
-    status: STATUS.ACTIVE,
-  },
-];
-
-let id: number = 3;
-
-export const getApptService = async (): Promise<IAppt[]> => {
+export const getApptService = async (): Promise<Appt[]> => {
+  const appts: Appt[] = await AppDataSource.getRepository(Appt).find();
   return appts;
 };
 
-export const getApptByIdService = async (id: number): Promise<IAppt> => {
-  const appt: IAppt | undefined = appts.find((appt) => appt.id === id);
+export const getApptByIdService = async (id: number): Promise<Appt> => {
+  const appt: Appt | null = await AppDataSource.getRepository(Appt).findOneBy({
+    id,
+  });
   if (!appt) {
     throw new Error("Appointment not found");
   }
   return appt;
 };
 
-export const createApptService = async (apptData: ApptDto): Promise<IAppt> => {
-  const appt: IAppt = {
-    id: id,
-    date: apptData.date,
-    time: apptData.time,
-    userId: apptData.userId,
-    status: STATUS.ACTIVE,
-  };
-  appts.push(appt);
-  id++;
+export const createApptService = async (apptData: ApptDto): Promise<Appt> => {
+  const appt: Appt = await AppDataSource.getRepository(Appt).create({
+    ...apptData
+  })
+  await AppDataSource.getRepository(Appt).save(appt);
   return appt;
 };
 
 export const cancelApptService = async (id: number): Promise<number> => {
-  const appt = await getApptByIdService(id);
+  const appt: Appt | null = await getApptByIdService(id);
+  if (!appt) {
+    throw new Error("Appointment not found");
+  }
   if (appt.status !== STATUS.ACTIVE) {
-    throw new Error("Appointment is already cancelled");
+    throw new Error("Appointment is already cancelled"); 
   }
   appt.status = STATUS.CANCELLED;
-  return appt.id;
+  await AppDataSource.getRepository(Appt).save(appt);
+  return appt.id
 };

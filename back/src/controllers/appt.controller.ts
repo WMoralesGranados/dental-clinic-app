@@ -2,10 +2,11 @@ import { Request, Response } from "express";
 import IAppt from "../interfaces/IAppt";
 import { cancelApptService, createApptService, getApptByIdService, getApptService } from "../services/appt.service";
 import ApptDto from "../dto/appt.dto";
+import { Appt } from "../entities/Appt";
 
 export const getAppts = async (req: Request, res: Response) => {
   try {
-    const appts: IAppt[] = await getApptService();
+    const appts: Appt[] = await getApptService();
     res.status(200).json({
       success: true,
       data: appts,
@@ -22,7 +23,7 @@ export const getAppts = async (req: Request, res: Response) => {
 export const getApptById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const appt: IAppt = await getApptByIdService(Number(id));
+    const appt: Appt | null = await getApptByIdService(Number(id));
     res.status(200).json({
       success: true,
       data: appt,
@@ -39,7 +40,7 @@ export const getApptById = async (req: Request, res: Response) => {
 export const scheduleAppt = async (req: Request, res: Response) => {
   try {
     const { date, time, userId } = req.body;
-    const appt: IAppt = await createApptService({date, time, userId});
+    const appt: Appt = await createApptService({date, time, userId});
     res.status(200).json({
       success: true,
       data: appt,
