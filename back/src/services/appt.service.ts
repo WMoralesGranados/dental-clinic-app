@@ -1,15 +1,15 @@
 import { STATUS } from '../enums/enums';
 import ApptDto from "../dto/appt.dto";
-import { AppDataSource } from '../config/data-source';
 import { Appt } from "../entities/Appt";
+import { apptModel } from '../models/models';
 
 export const getApptService = async (): Promise<Appt[]> => {
-  const appts: Appt[] = await AppDataSource.getRepository(Appt).find();
+  const appts: Appt[] = await apptModel.find();
   return appts;
 };
 
 export const getApptByIdService = async (id: number): Promise<Appt> => {
-  const appt: Appt | null = await AppDataSource.getRepository(Appt).findOneBy({
+  const appt: Appt | null = await apptModel.findOneBy({
     id,
   });
   if (!appt) {
@@ -19,10 +19,10 @@ export const getApptByIdService = async (id: number): Promise<Appt> => {
 };
 
 export const createApptService = async (apptData: ApptDto): Promise<Appt> => {
-  const appt: Appt = await AppDataSource.getRepository(Appt).create({
+  const appt: Appt = await apptModel.create({
     ...apptData
   })
-  await AppDataSource.getRepository(Appt).save(appt);
+  await apptModel.save(appt);
   return appt;
 };
 
@@ -31,7 +31,7 @@ export const cancelApptService = async (id: number): Promise<number> => {
   if (!appt) {
     throw new Error("Appointment not found");
   }
-  await AppDataSource.getRepository(Appt).update(appt.id, {
+  await apptModel.update(appt.id, {
     status: STATUS.CANCELLED,
   });
   return appt.id;
