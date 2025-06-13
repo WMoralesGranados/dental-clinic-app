@@ -4,10 +4,6 @@ import {
   getUserByIdService,
   getUserService,
 } from "../services/user.service";
-import IUser from "../interfaces/IUser";
-import ApptDto from "../dto/appt.dto";
-import IAppt from "../interfaces/IAppt";
-import { createApptService } from "../services/appt.service";
 import UserDto from "../dto/user.dto";
 import { validateCredentialService } from "../services/credential.service";
 import { User } from "../entities/User";

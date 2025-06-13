@@ -31,10 +31,8 @@ export const cancelApptService = async (id: number): Promise<number> => {
   if (!appt) {
     throw new Error("Appointment not found");
   }
-  if (appt.status !== STATUS.ACTIVE) {
-    throw new Error("Appointment is already cancelled"); 
-  }
-  appt.status = STATUS.CANCELLED;
-  await AppDataSource.getRepository(Appt).save(appt);
-  return appt.id
+  await AppDataSource.getRepository(Appt).update(appt.id, {
+    status: STATUS.CANCELLED,
+  });
+  return appt.id;
 };

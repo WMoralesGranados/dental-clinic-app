@@ -7,7 +7,7 @@ import { Appt } from "../entities/Appt";
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: DB_HOST,
-    port: Number(DB_PORT),
+    port: DB_PORT,
     username: DB_USERNAME,
     password: DB_PASSWORD,
     database: DB_NAME,
@@ -18,9 +18,3 @@ export const AppDataSource = new DataSource({
     subscribers: [],
     migrations: [],
 })
-
-// Pendientes
-// Crear el modelo de usuario
-// Crear el modelo de credencial
-// Crear el modelo de turno
-
