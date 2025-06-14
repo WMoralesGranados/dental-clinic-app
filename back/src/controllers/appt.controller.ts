@@ -12,7 +12,7 @@ export const getAppts = async (req: Request, res: Response) => {
       data: appts,
     });
   } catch (e) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: "Error getting appts",
       error: e,
@@ -29,7 +29,7 @@ export const getApptById = async (req: Request, res: Response) => {
       data: appt,
     });
   } catch (e) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: "Error getting appt",
       error: e,
@@ -41,12 +41,12 @@ export const scheduleAppt = async (req: Request, res: Response) => {
   try {
     const { date, time, userId } = req.body;
     const appt: Appt = await createApptService({date, time, userId});
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       data: appt,
     });
   } catch (e) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
       message: "Error scheduling appt",
       error: e,
@@ -63,7 +63,7 @@ export const cancelAppt = async (req: Request, res: Response) => {
       data: apptId,
     });
   } catch (e) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: "Error cancelling appt",
       error: e,

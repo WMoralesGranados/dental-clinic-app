@@ -16,7 +16,7 @@ export const getUsers = async (req: Request, res: Response) => {
       data: users,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: "Error getting users",
       error: error,
@@ -33,7 +33,7 @@ export const getUserById = async (req: Request, res: Response) => {
       data: user,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: "Error getting user",
       error: error,
@@ -50,12 +50,13 @@ export const register = async (req: Request, res: Response) => {
       username,
       password,
     });
-    res.status(200).json({
+    res.status(201).json({
       success: true,
-      data: user,
+      message: "User created successfully",
+      data: user
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
       message: "Error registering user",
       error: error,
@@ -72,9 +73,9 @@ export const login = async (req: Request, res: Response) => {
       data: login,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
-      message: "Error logging in",
+      message: "Email or password incorrect",
       error: error,
     });
   }
